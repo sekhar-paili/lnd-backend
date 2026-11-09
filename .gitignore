@@ -1,0 +1,54 @@
+# Node / Express / PostgreSQL backend
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Environment files with secrets (keep the template)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+
+# Test and coverage output
+coverage/
+.nyc_output/
+
+# Local database data and dumps
+pgdata/
+*.sql.gz
+*.dump
+
+# Process manager state
+.pm2/
+
+# Keys and certificates
+*.pem
+*.key
+*.crt
+
+# Scratch files from local checks
+build-check.txt
+test-check.txt
+
+# IDEs and editors
+.idea/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini

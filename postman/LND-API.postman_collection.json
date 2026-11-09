@@ -1,0 +1,549 @@
+{
+  "info": {
+    "name": "LND Platform API",
+    "description": "REST API for the LND Learning & Development platform.\n\nUsage:\n1. Import this collection and the LND-Local environment, then select the environment.\n2. Run one of the requests in the 'Auth' folder. Its test script saves the JWT into the {{token}} variable.\n3. All other requests use {{token}} automatically (collection-level Bearer auth).\n\nAdmin-only requests return 403 when you are logged in as Employee or Partner. That is expected.\n\nSeeded demo accounts: admin/admin123, erin/employee123, partner/partner123.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "token", "value": "" },
+    { "key": "videoId", "value": "vid-welcome" },
+    { "key": "quizId", "value": "quiz-security" },
+    { "key": "createdVideoId", "value": "" },
+    { "key": "createdQuizId", "value": "" },
+    { "key": "assignmentId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Database is up', function () { pm.expect(pm.response.json().database).to.eql('up'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login as Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) {",
+                  "  var body = pm.response.json();",
+                  "  pm.collectionVariables.set('token', body.token);",
+                  "  pm.collectionVariables.set('currentUserId', body.user.id);",
+                  "  pm.test('Role is LND_ADMIN', function () { pm.expect(body.user.role).to.eql('LND_ADMIN'); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login as Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) {",
+                  "  var body = pm.response.json();",
+                  "  pm.collectionVariables.set('token', body.token);",
+                  "  pm.collectionVariables.set('currentUserId', body.user.id);",
+                  "  pm.test('Role is EMPLOYEE', function () { pm.expect(body.user.role).to.eql('EMPLOYEE'); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"erin\",\n  \"password\": \"employee123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login as Partner",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) {",
+                  "  var body = pm.response.json();",
+                  "  pm.collectionVariables.set('token', body.token);",
+                  "  pm.collectionVariables.set('currentUserId', body.user.id);",
+                  "  pm.test('Role is PARTNER', function () { pm.expect(body.user.role).to.eql('PARTNER'); });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"partner\",\n  \"password\": \"partner123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login with wrong password (expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Rejected with 401', function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"wrong-password\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Current user (me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Videos",
+      "item": [
+        {
+          "name": "List videos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Returns an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/videos", "host": ["{{baseUrl}}"], "path": ["api", "videos"] }
+          }
+        },
+        {
+          "name": "Get video by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/videos/{{videoId}}", "host": ["{{baseUrl}}"], "path": ["api", "videos", "{{videoId}}"] }
+          }
+        },
+        {
+          "name": "Create video (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Created (201)', function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set('createdVideoId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Postman Test Video\",\n  \"description\": \"Created from the Postman collection\",\n  \"categoryId\": \"cat-onboarding\",\n  \"durationSeconds\": 120,\n  \"sourceUrl\": \"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/videos", "host": ["{{baseUrl}}"], "path": ["api", "videos"] }
+          }
+        },
+        {
+          "name": "Update video (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Postman Test Video (edited)\",\n  \"description\": \"Updated from the Postman collection\",\n  \"categoryId\": \"cat-onboarding\",\n  \"durationSeconds\": 150,\n  \"sourceUrl\": \"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/videos/{{createdVideoId}}", "host": ["{{baseUrl}}"], "path": ["api", "videos", "{{createdVideoId}}"] }
+          }
+        },
+        {
+          "name": "Delete video (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/videos/{{createdVideoId}}", "host": ["{{baseUrl}}"], "path": ["api", "videos", "{{createdVideoId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories and Milestones",
+      "item": [
+        {
+          "name": "List categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/categories", "host": ["{{baseUrl}}"], "path": ["api", "categories"] }
+          }
+        },
+        {
+          "name": "List milestones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/milestones", "host": ["{{baseUrl}}"], "path": ["api", "milestones"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progress",
+      "item": [
+        {
+          "name": "My progress",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/progress/me", "host": ["{{baseUrl}}"], "path": ["api", "progress", "me"] }
+          }
+        },
+        {
+          "name": "Save progress (50%)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"videoId\": \"{{videoId}}\",\n  \"positionSeconds\": 150,\n  \"percentComplete\": 50\n}" },
+            "url": { "raw": "{{baseUrl}}/api/progress", "host": ["{{baseUrl}}"], "path": ["api", "progress"] }
+          }
+        },
+        {
+          "name": "Save progress (95% - marks completed)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Marked completed at or above 90%', function () { pm.expect(pm.response.json().completed).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"videoId\": \"{{videoId}}\",\n  \"positionSeconds\": 285,\n  \"percentComplete\": 95\n}" },
+            "url": { "raw": "{{baseUrl}}/api/progress", "host": ["{{baseUrl}}"], "path": ["api", "progress"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quizzes",
+      "item": [
+        {
+          "name": "List quizzes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Returns an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/quizzes", "host": ["{{baseUrl}}"], "path": ["api", "quizzes"] }
+          }
+        },
+        {
+          "name": "Get quiz by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/quizzes/{{quizId}}", "host": ["{{baseUrl}}"], "path": ["api", "quizzes", "{{quizId}}"] }
+          }
+        },
+        {
+          "name": "Create quiz (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Created (201)', function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set('createdQuizId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Postman Test Quiz\",\n  \"passMarkPercent\": 50,\n  \"questions\": [\n    {\n      \"id\": \"q1\",\n      \"type\": \"MCQ\",\n      \"prompt\": \"What is 2 + 2?\",\n      \"options\": [\n        { \"id\": \"a\", \"label\": \"3\" },\n        { \"id\": \"b\", \"label\": \"4\" }\n      ],\n      \"correctOptionId\": \"b\"\n    },\n    {\n      \"id\": \"q2\",\n      \"type\": \"TRUE_FALSE\",\n      \"prompt\": \"The sky is blue.\",\n      \"options\": [\n        { \"id\": \"true\", \"label\": \"True\" },\n        { \"id\": \"false\", \"label\": \"False\" }\n      ],\n      \"correctOptionId\": \"true\"\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/quizzes", "host": ["{{baseUrl}}"], "path": ["api", "quizzes"] }
+          }
+        },
+        {
+          "name": "Update quiz (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Postman Test Quiz (edited)\",\n  \"passMarkPercent\": 60,\n  \"questions\": [\n    {\n      \"id\": \"q1\",\n      \"type\": \"MCQ\",\n      \"prompt\": \"What is 2 + 2?\",\n      \"options\": [\n        { \"id\": \"a\", \"label\": \"3\" },\n        { \"id\": \"b\", \"label\": \"4\" }\n      ],\n      \"correctOptionId\": \"b\"\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/quizzes/{{createdQuizId}}", "host": ["{{baseUrl}}"], "path": ["api", "quizzes", "{{createdQuizId}}"] }
+          }
+        },
+        {
+          "name": "Submit quiz attempt",
+          "description": "Body keys are question ids and values are option ids. This example matches the seeded 'quiz-security' quiz. {{quizId}} defaults to 'quiz-security'; if you change it, change the answers to match that quiz. The server requires every question to be answered.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Attempt recorded (201)', function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) {",
+                  "  var r = pm.response.json().result;",
+                  "  pm.test('Result has score and pass flag', function () {",
+                  "    pm.expect(r).to.have.property('scorePercent');",
+                  "    pm.expect(r).to.have.property('passed');",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"answers\": {\n    \"q1\": \"o2\",\n    \"q2\": \"true\",\n    \"q3\": \"o2\"\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/api/quizzes/{{quizId}}/attempts", "host": ["{{baseUrl}}"], "path": ["api", "quizzes", "{{quizId}}", "attempts"] }
+          }
+        },
+        {
+          "name": "My quiz attempts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/quizzes/attempts/me", "host": ["{{baseUrl}}"], "path": ["api", "quizzes", "attempts", "me"] }
+          }
+        },
+        {
+          "name": "All quiz attempts (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/quizzes/attempts/all", "host": ["{{baseUrl}}"], "path": ["api", "quizzes", "attempts", "all"] }
+          }
+        },
+        {
+          "name": "Delete quiz (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/quizzes/{{createdQuizId}}", "host": ["{{baseUrl}}"], "path": ["api", "quizzes", "{{createdQuizId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Learning Paths",
+      "item": [
+        {
+          "name": "List learning paths",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/learning-paths", "host": ["{{baseUrl}}"], "path": ["api", "learning-paths"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assignments",
+      "item": [
+        {
+          "name": "My assignments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/assignments/me", "host": ["{{baseUrl}}"], "path": ["api", "assignments", "me"] }
+          }
+        },
+        {
+          "name": "List all assignments (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/assignments", "host": ["{{baseUrl}}"], "path": ["api", "assignments"] }
+          }
+        },
+        {
+          "name": "Create assignment (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Created (201)', function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set('assignmentId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"audienceType\": \"ROLE\",\n  \"audienceValue\": \"EMPLOYEE\",\n  \"itemType\": \"VIDEO\",\n  \"itemId\": \"{{videoId}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/assignments", "host": ["{{baseUrl}}"], "path": ["api", "assignments"] }
+          }
+        },
+        {
+          "name": "Delete assignment (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/assignments/{{assignmentId}}", "host": ["{{baseUrl}}"], "path": ["api", "assignments", "{{assignmentId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "List feedback for a video",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback?targetType=VIDEO&targetId={{videoId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "feedback"],
+              "query": [
+                { "key": "targetType", "value": "VIDEO" },
+                { "key": "targetId", "value": "{{videoId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit feedback",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Created (201)', function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetType\": \"VIDEO\",\n  \"targetId\": \"{{videoId}}\",\n  \"rating\": 5,\n  \"comment\": \"Submitted from Postman\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/feedback", "host": ["{{baseUrl}}"], "path": ["api", "feedback"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Participant completion report (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/reports/participants", "host": ["{{baseUrl}}"], "path": ["api", "reports", "participants"] }
+          }
+        }
+      ]
+    }
+  ]
+}
