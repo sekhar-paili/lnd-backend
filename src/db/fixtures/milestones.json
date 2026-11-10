@@ -1,0 +1,7 @@
+[
+  { "id": "m1", "title": "Platform kickoff", "status": "DONE", "date": "2026-09-01" },
+  { "id": "m2", "title": "Video catalogue live", "status": "DONE", "date": "2026-09-20" },
+  { "id": "m3", "title": "Quizzes & learning paths", "status": "IN_PROGRESS", "date": "2026-10-25" },
+  { "id": "m4", "title": "Reporting & feedback", "status": "IN_PROGRESS", "date": "2026-11-05" },
+  { "id": "m5", "title": "Pilot rollout to partners", "status": "PLANNED", "date": "2026-11-20" }
+]

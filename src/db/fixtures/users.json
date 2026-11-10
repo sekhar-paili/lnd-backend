@@ -1,0 +1,34 @@
+[
+  {
+    "id": "u-admin",
+    "name": "Avery Admin",
+    "role": "LND_ADMIN",
+    "group": "ld-team",
+    "username": "admin",
+    "password": "admin123"
+  },
+  {
+    "id": "u-emp-1",
+    "name": "Erin Employee",
+    "role": "EMPLOYEE",
+    "group": "engineering",
+    "username": "erin",
+    "password": "employee123"
+  },
+  {
+    "id": "u-emp-2",
+    "name": "Evan Employee",
+    "role": "EMPLOYEE",
+    "group": "sales",
+    "username": "evan",
+    "password": "employee123"
+  },
+  {
+    "id": "u-partner",
+    "name": "Parker Partner",
+    "role": "PARTNER",
+    "group": "external",
+    "username": "partner",
+    "password": "partner123"
+  }
+]

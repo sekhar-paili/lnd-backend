@@ -6,16 +6,13 @@ import bcrypt from 'bcryptjs';
 import { pool } from './pool';
 
 /**
- * Seeds the database from the same JSON fixtures the Angular app ships with
- * (frontend/src/assets/mock), so the backend starts with identical demo
- * data. WARNING: this wipes existing rows in the seeded tables.
+ * Seeds the database from the JSON fixtures stored in this project
+ * (src/db/fixtures), so the backend has no dependency on the frontend
+ * repo. WARNING: this wipes existing rows in the seeded tables.
  *
- * Resolved from backend/src/db/ -> up to the workspace root -> into the
- * frontend's src/assets/mock. Override with FIXTURE_DIR if the frontend
- * ever moves again, without needing a code change.
+ * Override the location with FIXTURE_DIR if needed.
  */
-const FIXTURE_DIR =
-  process.env['FIXTURE_DIR'] ?? resolve(__dirname, '../../../frontend/src/assets/mock');
+const FIXTURE_DIR = process.env['FIXTURE_DIR'] ?? resolve(__dirname, 'fixtures');
 
 function load<T>(file: string): T {
   return JSON.parse(readFileSync(resolve(FIXTURE_DIR, file), 'utf8')) as T;

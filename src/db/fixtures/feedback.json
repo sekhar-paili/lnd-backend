@@ -1,0 +1,20 @@
+[
+  {
+    "id": "fb-1",
+    "userId": "u-emp-1",
+    "targetType": "VIDEO",
+    "targetId": "vid-welcome",
+    "rating": 5,
+    "comment": "Great intro, set the tone well.",
+    "createdAt": "2026-10-12T10:00:00.000Z"
+  },
+  {
+    "id": "fb-2",
+    "userId": "u-emp-2",
+    "targetType": "VIDEO",
+    "targetId": "vid-security-basics",
+    "rating": 4,
+    "comment": "Clear and useful examples.",
+    "createdAt": "2026-10-14T11:30:00.000Z"
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "asg-1",
+    "audienceType": "ROLE",
+    "audienceValue": "EMPLOYEE",
+    "itemType": "LEARNING_PATH",
+    "itemId": "path-security",
+    "assignedAt": "2026-10-01T09:00:00.000Z"
+  },
+  {
+    "id": "asg-2",
+    "audienceType": "ROLE",
+    "audienceValue": "EMPLOYEE",
+    "itemType": "VIDEO",
+    "itemId": "vid-welcome",
+    "assignedAt": "2026-10-01T09:00:00.000Z"
+  },
+  {
+    "id": "asg-3",
+    "audienceType": "GROUP",
+    "audienceValue": "engineering",
+    "itemType": "LEARNING_PATH",
+    "itemId": "path-tech",
+    "assignedAt": "2026-10-05T09:00:00.000Z"
+  },
+  {
+    "id": "asg-4",
+    "audienceType": "ROLE",
+    "audienceValue": "PARTNER",
+    "itemType": "VIDEO",
+    "itemId": "vid-product-tour",
+    "assignedAt": "2026-10-10T09:00:00.000Z"
+  }
+]

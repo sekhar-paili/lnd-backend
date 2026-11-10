@@ -1,0 +1,21 @@
+[
+  {
+    "id": "path-security",
+    "title": "Security Essentials",
+    "description": "Become confident with everyday security practices, then prove it.",
+    "steps": [
+      { "id": "s1", "title": "Watch: Phishing Awareness", "videoId": "vid-security-basics", "order": 1 },
+      { "id": "s2", "title": "Watch: Password Hygiene and MFA", "videoId": "vid-password-hygiene", "order": 2 },
+      { "id": "s3", "title": "Assessment: Security Awareness Check", "quizId": "quiz-security", "order": 3 }
+    ]
+  },
+  {
+    "id": "path-tech",
+    "title": "Technical Foundations",
+    "description": "Core technical skills starting with version control.",
+    "steps": [
+      { "id": "s1", "title": "Watch: Intro to Git", "videoId": "vid-git-intro", "order": 1 },
+      { "id": "s2", "title": "Assessment: Git Fundamentals", "quizId": "quiz-git", "order": 2 }
+    ]
+  }
+]

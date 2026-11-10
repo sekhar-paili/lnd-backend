@@ -1,0 +1,7 @@
+[
+  { "id": "cat-onboarding", "name": "Onboarding" },
+  { "id": "cat-security", "name": "Security & Compliance" },
+  { "id": "cat-leadership", "name": "Leadership" },
+  { "id": "cat-technical", "name": "Technical Skills" },
+  { "id": "cat-product", "name": "Product" }
+]

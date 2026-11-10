@@ -1,0 +1,56 @@
+[
+  {
+    "id": "vid-welcome",
+    "title": "Welcome to the Company",
+    "description": "A warm welcome and overview of our mission, values, and how teams work together.",
+    "categoryId": "cat-onboarding",
+    "durationSeconds": 300,
+    "sourceUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    "thumbnailUrl": ""
+  },
+  {
+    "id": "vid-security-basics",
+    "title": "Security Basics: Phishing Awareness",
+    "description": "Recognize phishing attempts and learn how to keep company data safe.",
+    "categoryId": "cat-security",
+    "durationSeconds": 420,
+    "sourceUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    "thumbnailUrl": ""
+  },
+  {
+    "id": "vid-password-hygiene",
+    "title": "Password Hygiene and MFA",
+    "description": "Strong passwords, password managers, and multi-factor authentication explained.",
+    "categoryId": "cat-security",
+    "durationSeconds": 360,
+    "sourceUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    "thumbnailUrl": ""
+  },
+  {
+    "id": "vid-leadership-101",
+    "title": "Leadership 101: Giving Feedback",
+    "description": "Practical techniques for giving constructive, actionable feedback to your team.",
+    "categoryId": "cat-leadership",
+    "durationSeconds": 540,
+    "sourceUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    "thumbnailUrl": ""
+  },
+  {
+    "id": "vid-git-intro",
+    "title": "Technical Skills: Intro to Git",
+    "description": "Version control fundamentals: commits, branches, merges, and pull requests.",
+    "categoryId": "cat-technical",
+    "durationSeconds": 600,
+    "sourceUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    "thumbnailUrl": ""
+  },
+  {
+    "id": "vid-product-tour",
+    "title": "Product Tour: Core Features",
+    "description": "A guided tour of the core product features every team member should know.",
+    "categoryId": "cat-product",
+    "durationSeconds": 480,
+    "sourceUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    "thumbnailUrl": ""
+  }
+]
